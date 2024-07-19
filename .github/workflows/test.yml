@@ -8,9 +8,9 @@ jobs:
     strategy:
       matrix:
         entry:
-          - { version: 17, distribution: 'adopt' }
+          - { version: 17, distribution: "adopt" }
     steps:
-      - name: Checkout analysis-vietnamese 
+      - name: Checkout analysis-vietnamese
         uses: actions/checkout@v3
       - name: Check Out coccoc-tokenizer
         uses: actions/checkout@v3
