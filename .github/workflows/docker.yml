@@ -1,0 +1,45 @@
+name: Build Docker Image
+
+on:
+  push:
+    branches:
+      - feat/ci
+
+jobs:
+  build:
+    permissions:
+      contents: read
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout Repo"
+        uses: "actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b" #v3.1.0
+
+      - id: "meta"
+        name: "Docker Meta"
+        uses: "docker/metadata-action@57396166ad8aefe6098280995947635806a0e6ea" #v4.1.1
+        with:
+          images: droppii.azurecr.io/droppii/elasticsearch
+          tags: |
+            type=ref,event=branch
+            type=semver,event=tag,pattern={{raw}}
+
+      - name: Login to droppii.azurecr.io
+        uses: azure/docker-login@v1
+        with:
+          login-server: droppii.azurecr.io
+          username: ${{ secrets.AZURE_CLIENT_ID }}
+          password: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+      - name: "Set up Docker Buildx"
+        uses: "docker/setup-buildx-action@8c0edbc76e98fa90f69d9a2c020dcb50019dc325" #v2.2.1
+
+      - name: Build and push Docker image to ACR
+        uses: docker/build-push-action@v3.2.0
+        with:
+          context: .
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
