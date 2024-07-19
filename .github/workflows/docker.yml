@@ -16,6 +16,11 @@ jobs:
       - name: "Checkout Repo"
         uses: "actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b" #v3.1.0
 
+      - name: "Create env file"
+        run: |
+          touch .env
+          echo ES_VERSION=8.7.0 >> .env
+
       - id: "meta"
         name: "Docker Meta"
         uses: "docker/metadata-action@57396166ad8aefe6098280995947635806a0e6ea" #v4.1.1
