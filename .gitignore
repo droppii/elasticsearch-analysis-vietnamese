@@ -40,3 +40,11 @@ target/
 /bin/
 .env
 *.iml
+
+# Repo-owned execution profiles; per-task artifacts stay local.
+!/.engineering/
+!/.engineering/**/
+!/.engineering/**
+/.engineering/**/node_modules/
+/.engineering/**/__pycache__/
+/.engineering/runs/
